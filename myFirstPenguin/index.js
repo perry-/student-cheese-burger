@@ -24,21 +24,21 @@ function moveTowardsCenterOfMap(body) {
 function moveTowardsPoint(body, pointX, pointY) {
     let penguinPositionX = body.you.x;
     let penguinPositionY = body.you.y;
-    let plannedMovement = PASS;
+    let plannedAction = PASS;
     
     if (penguinPositionX < pointX) {
-        plannedMovement =  MOVE_RIGHT[body.you.direction];
+        plannedAction =  MOVE_RIGHT[body.you.direction];
     } else if (penguinPositionX > pointX) {
-        plannedMovement = MOVE_LEFT[body.you.direction];
+        plannedAction = MOVE_LEFT[body.you.direction];
     } else if (penguinPositionY < pointY) {
-        plannedMovement = MOVE_DOWN[body.you.direction];
+        plannedAction = MOVE_DOWN[body.you.direction];
     } else if (penguinPositionY > pointY) {
-        plannedMovement = MOVE_UP[body.you.direction];
+        plannedAction = MOVE_UP[body.you.direction];
     }
-    if (plannedMovement === ADVANCE && wallInFrontOfPenguin(body)) {
+    if (plannedAction === ADVANCE && wallInFrontOfPenguin(body)) {
         return SHOOT;
     }
-    return plannedMovement
+    return plannedAction
 }
 
 function doesCellContainWall(walls, x, y) {
