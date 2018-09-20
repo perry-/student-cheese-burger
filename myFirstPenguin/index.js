@@ -17,49 +17,49 @@ const ATTACK_LEFT = {"top" : ROTATE_LEFT, "bottom" : ROTATE_RIGHT, "right" : ROT
 
 function moveTowardsCenterOfMap(body) {
     let centerPointX = Math.floor((body.mapWidth - 1)/2);
-    let centerPointY = Math.floor((body.mapHeight-1)/2);
+    let centerPointY = Math.floor((body.mapHeight - 1)/2);
+    return moveTowardsPoint(body, centerPointX, centerPointY);
+}
+
+function moveTowardsPoint(body, pointX, pointY) {
     let penguinPositionX = body.you.x;
     let penguinPositionY = body.you.y;
     let plannedMovement = PASS;
     
-    if (penguinPositionX < centerPointX) {
+    if (penguinPositionX < pointX) {
         plannedMovement =  MOVE_RIGHT[body.you.direction];
-    } else if (penguinPositionX > centerPointX) {
+    } else if (penguinPositionX > pointX) {
         plannedMovement = MOVE_LEFT[body.you.direction];
-    } else if (penguinPositionY < centerPointY) {
+    } else if (penguinPositionY < pointY) {
         plannedMovement = MOVE_DOWN[body.you.direction];
-    } else if (penguinPositionY > centerPointY) {
+    } else if (penguinPositionY > pointY) {
         plannedMovement = MOVE_UP[body.you.direction];
     }
-    if ((plannedMovement === ADVANCE && existsWallInFrontOfPenguin(body)) || penguinPositionX === centerPointX && penguinPositionY === centerPointY ) {
+    if (plannedMovement === ADVANCE && wallInFrontOfPenguin(body.you)) {
         return SHOOT;
     }
     return plannedMovement
 }
 
-function existsWallInFrontOfPenguin(body) {
-    let xValueToCheckForWall = body.you.x;
-    let yValueToCheckForWall = body.you.y;
-    switch(body.you.direction) {
-        case "top":
-            yValueToCheckForWall--;
-            break;
-        case "bottom":
-            yValueToCheckForWall++;
-            break;
-        case "left":
-            xValueToCheckForWall--;
-            break;
-        case "right":
-            xValueToCheckForWall++;
-            break;
-        default:
-            break;
-    }
-    if (body.walls.find(wall => wall.x === xValueToCheckForWall && wall.y === yValueToCheckForWall)) {
+function doesCellContainWall(walls, x, y) {
+    if (walls.find(wall => wall.x === x && wall.y === y)) {
         return true;
-    } else {
-        return false;
+    }
+    return false;
+}
+
+function wallInFrontOfPenguin(penguin) {
+    switch(penguin.direction) {
+        case "top":
+            return doesCellContainWall(walls, penguin.x, penguin.y--);
+        case "bottom":
+            return doesCellContainWall(walls, penguin.x, penguin.y++);
+        case "left":
+            return doesCellContainWall(walls, penguin.x--, penguin.y);
+        case "right":
+            return doesCellContainWall(walls, penguin.x++, penguin.y);
+        default:
+            return true;
     }
 }
 
@@ -83,7 +83,6 @@ function attackEnemy(body) {
     let penguinY = body.you.y;
     let enemyX = body.enemies[0].x;
     let enemyY = body.enemies[0].y;
-
     let plannedMovement = PASS;
 
     if (penguinX < enemyX) {
@@ -98,30 +97,35 @@ function attackEnemy(body) {
     return plannedMovement;
 }
 
-function action(req, context) {
-    if (req.params.query == "command") {
-        let response = PASS;
-        if (enemyIsVisible(req.body) && enemyIsOnSameLine(req.body) && enemyIsInRange(req.body)) {
-            response = attackEnemy(req.body);
-        } else {
-            response = moveTowardsCenterOfMap(req.body);
-        }
-        return { command: response};
+function commandReceived(body) {
+    let response = PASS;
+    if (enemyIsVisible(body) && enemyIsOnSameLine(body) && enemyIsInRange(body)) {
+        response = attackEnemy(body);
+    } else {
+        response = moveTowardsCenterOfMap(body);
     }
-    return info();
+    return { command: response};
 }
 
-function info() {
+module.exports = function (context, req) {
+    context.log('JavaScript HTTP trigger function processed a request.');
+
+    let response = action(req);    
+    context.res = {body: response};
+
+    context.done();
+};
+
+function action(req) {
+    if (req.params.query == "command") {
+        return commandReceived(req.body);
+    }
+    return infoReceived();
+}
+
+function infoReceived() {
     let penguinName = "Pingu";
     let teamName = "Bouvet";
 
     return {name: penguinName, team: teamName};
 }
-module.exports = function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
-
-    let response = action(req, context);    
-    context.res = {body: response};
-
-    context.done();
-};
