@@ -75,7 +75,7 @@ function enemyIsOnSameLine(body) {
 }
 
 function enemyIsInRange(body) {
-    return (Math.abs(body.enemies[0].x - body.you.x) <= body.you.weaponRange || Math.abs(body.enemies[0].y - body.you.y) <= body.you.weaponRange)
+    return (Math.abs(body.enemies[0].x - body.you.x) < body.you.weaponRange || Math.abs(body.enemies[0].y - body.you.y) < body.you.weaponRange)
 }
 
 function attackEnemy(body) {
