@@ -35,7 +35,7 @@ function moveTowardsPoint(body, pointX, pointY) {
     } else if (penguinPositionY > pointY) {
         plannedMovement = MOVE_UP[body.you.direction];
     }
-    if (plannedMovement === ADVANCE && wallInFrontOfPenguin(body.you)) {
+    if (plannedMovement === ADVANCE && wallInFrontOfPenguin(body)) {
         return SHOOT;
     }
     return plannedMovement
@@ -48,16 +48,16 @@ function doesCellContainWall(walls, x, y) {
     return false;
 }
 
-function wallInFrontOfPenguin(penguin) {
-    switch(penguin.direction) {
+function wallInFrontOfPenguin(body) {
+    switch(body.you.direction) {
         case "top":
-            return doesCellContainWall(walls, penguin.x, penguin.y--);
+            return doesCellContainWall(body.walls, penguin.x, penguin.y--);
         case "bottom":
-            return doesCellContainWall(walls, penguin.x, penguin.y++);
+            return doesCellContainWall(body.walls, penguin.x, penguin.y++);
         case "left":
-            return doesCellContainWall(walls, penguin.x--, penguin.y);
+            return doesCellContainWall(body.walls, penguin.x--, penguin.y);
         case "right":
-            return doesCellContainWall(walls, penguin.x++, penguin.y);
+            return doesCellContainWall(body.walls, penguin.x++, penguin.y);
         default:
             return true;
     }
