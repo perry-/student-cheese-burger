@@ -83,18 +83,18 @@ function attackEnemy(body) {
     let penguinY = body.you.y;
     let enemyX = body.enemies[0].x;
     let enemyY = body.enemies[0].y;
-    let plannedMovement = PASS;
+    let plannedAction = PASS;
 
     if (penguinX < enemyX) {
-        plannedMovement =  ATTACK_RIGHT[body.you.direction];
+        plannedAction =  ATTACK_RIGHT[body.you.direction];
     } else if (penguinX > enemyX) {
-        plannedMovement = ATTACK_LEFT[body.you.direction];
+        plannedAction = ATTACK_LEFT[body.you.direction];
     } else if (penguinY < enemyY) {
-        plannedMovement = ATTACK_DOWN[body.you.direction];
+        plannedAction = ATTACK_DOWN[body.you.direction];
     } else if (penguinY > enemyY) {
-        plannedMovement = ATTACK_UP[body.you.direction];
+        plannedAction = ATTACK_UP[body.you.direction];
     }
-    return plannedMovement;
+    return plannedAction;
 }
 
 function commandReceived(body) {
