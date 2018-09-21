@@ -55,13 +55,13 @@ function doesCellContainWall(walls, x, y) {
 function wallInFrontOfPenguin(body) {
     switch(body.you.direction) {
         case "top":
-            return doesCellContainWall(body.walls, body.you.x, body.you.y--);
+            return doesCellContainWall(body.walls, body.you.x, --body.you.y);
         case "bottom":
-            return doesCellContainWall(body.walls, body.you.x, body.you.y++);
+            return doesCellContainWall(body.walls, body.you.x, ++body.you.y);
         case "left":
-            return doesCellContainWall(body.walls, body.you.x--, body.you.y);
+            return doesCellContainWall(body.walls, --body.you.x, body.you.y);
         case "right":
-            return doesCellContainWall(body.walls, body.you.x++, body.you.y);
+            return doesCellContainWall(body.walls, ++body.you.x, body.you.y);
         default:
             return true;
     }
