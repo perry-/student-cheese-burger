@@ -14,6 +14,7 @@ const ATTACK_UP =  {"top" : SHOOT, "bottom" : ROTATE_LEFT, "right" : ROTATE_LEFT
 const ATTACK_DOWN =  {"top" : ROTATE_LEFT, "bottom" : SHOOT, "right" : ROTATE_RIGHT ,"left" : ROTATE_LEFT };
 const ATTACK_RIGHT = {"top" : ROTATE_RIGHT, "bottom" : ROTATE_LEFT, "right" : SHOOT ,"left" : ROTATE_LEFT };
 const ATTACK_LEFT = {"top" : ROTATE_LEFT, "bottom" : ROTATE_RIGHT, "right" : ROTATE_RIGHT,"left" : SHOOT };
+var testContext;
 
 function moveTowardsCenterOfMap(body) {
     let centerPointX = Math.floor((body.mapWidth - 1)/2);
@@ -42,6 +43,9 @@ function moveTowardsPoint(body, pointX, pointY) {
 }
 
 function doesCellContainWall(walls, x, y) {
+    testContext.log(walls);
+    testContext.log(x);
+    testContext.log(y);
     if (walls.find(wall => wall.x == x && wall.y == y)) {
         return true;
     }
@@ -75,7 +79,8 @@ function enemyIsOnSameLine(body) {
 }
 
 function enemyIsInRange(body) {
-    return (Math.abs(body.enemies[0].x - body.you.x) <= body.you.weaponRange || Math.abs(body.enemies[0].y - body.you.y) <= body.you.weaponRange);
+    //return (Math.abs(body.enemies[0].x - body.you.x) <= body.you.weaponRange || Math.abs(body.enemies[0].y - body.you.y) <= body.you.weaponRange);
+    return (body.you.targetRange <= body.you.weaponRange);
 }
 
 function attackEnemy(body) {
@@ -109,6 +114,7 @@ function commandReceived(body) {
 
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
+    testContext = context;
     let response = action(req);    
     context.res = {body: response};
     context.done();
