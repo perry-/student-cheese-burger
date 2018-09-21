@@ -42,7 +42,7 @@ function moveTowardsPoint(body, pointX, pointY) {
 }
 
 function doesCellContainWall(walls, x, y) {
-    if (walls.find(wall => wall.x === x && wall.y === y)) {
+    if (walls.find(wall => wall.x == x && wall.y == y)) {
         return true;
     }
     return false;
@@ -75,9 +75,7 @@ function enemyIsOnSameLine(body) {
 }
 
 function enemyIsInRange(body) {
-    // return (Math.abs(body.enemies[0].x - body.you.x) < body.you.weaponRange - 1 
-    // || Math.abs(body.enemies[0].y - body.you.y) < body.you.weaponRange - 1);
-    return body.you.targetRange <= body.you.weaponRange;
+    return (Math.abs(body.enemies[0].x - body.you.x) <= body.you.weaponRange || Math.abs(body.enemies[0].y - body.you.y) <= body.you.weaponRange);
 }
 
 function attackEnemy(body) {
@@ -111,10 +109,8 @@ function commandReceived(body) {
 
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
-
     let response = action(req);    
     context.res = {body: response};
-
     context.done();
 };
 
