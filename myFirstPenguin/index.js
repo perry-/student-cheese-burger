@@ -113,7 +113,6 @@ function commandReceived(body) {
 
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
-    testContext = context;
     let response = action(req);    
     context.res = {body: response};
     context.done();
