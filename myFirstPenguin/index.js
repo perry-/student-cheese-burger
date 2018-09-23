@@ -126,7 +126,7 @@ function action(req) {
 }
 
 function infoReceived() {
-    let penguinName = "Pingu";
+    let penguinName = "Perrys penguin";
     let teamName = "Bouvet";
 
     return {name: penguinName, team: teamName};
