@@ -24,7 +24,7 @@ function moveTowardsCenterOfMap(body) {
 function moveTowardsPoint(body, pointX, pointY) {
     let penguinPositionX = body.you.x;
     let penguinPositionY = body.you.y;
-    let plannedAction = PASS;
+    let plannedAction = SHOOT;
     
     if (penguinPositionX < pointX) {
         plannedAction =  MOVE_RIGHT[body.you.direction];
